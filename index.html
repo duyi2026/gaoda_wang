@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>高达未来机库</title>
+  <style>
+    :root {
+      --void: #020609;
+      --metal-0: #071017;
+      --metal-1: #0d1720;
+      --metal-2: #142431;
+      --steel: #223542;
+      --line: rgba(202, 249, 255, 0.18);
+      --text: #e8f7f8;
+      --muted: #8ba7b3;
+      --cyan: #76efff;
+      --cold: #c9fbff;
+      --red: #ff4051;
+      --gold: #d8b45b;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--void);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% -12%, rgba(118, 239, 255, 0.18), transparent 32rem),
+        linear-gradient(135deg, rgba(255, 64, 81, 0.08), transparent 28rem),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 80px),
+        linear-gradient(180deg, #08131b 0%, var(--void) 42%, #03070b 100%);
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 100% 7px,
+        radial-gradient(circle at 50% 20%, transparent 0 45%, rgba(2, 6, 9, 0.52) 78%);
+      mix-blend-mode: screen;
+      opacity: 0.32;
+      z-index: 2;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 94vh;
+      padding: 18px 0 30px;
+      display: grid;
+      align-items: stretch;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .mark {
+      display: inline-grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      color: var(--cold);
+      font-weight: 800;
+    }
+
+    .mark::before {
+      content: "";
+      width: 28px;
+      aspect-ratio: 1;
+      background:
+        linear-gradient(90deg, transparent 42%, var(--cyan) 42% 58%, transparent 58%),
+        linear-gradient(transparent 42%, var(--cyan) 42% 58%, transparent 58%),
+        linear-gradient(135deg, transparent 15%, rgba(118, 239, 255, 0.24) 15% 85%, transparent 85%);
+      border: 1px solid rgba(118, 239, 255, 0.55);
+      box-shadow: 0 0 20px rgba(118, 239, 255, 0.25);
+    }
+
+    .status {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(255, 64, 81, 0.75);
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 24px;
+      align-items: center;
+      padding: 22px 0 0;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--cyan);
+      box-shadow: 0 0 12px rgba(118, 239, 255, 0.8);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 10ch;
+      color: #f6feff;
+      font-family: "Microsoft JhengHei UI", "Microsoft YaHei UI", sans-serif;
+      font-size: clamp(44px, 16vw, 112px);
+      line-height: 0.92;
+      font-weight: 900;
+      text-shadow: 0 0 34px rgba(118, 239, 255, 0.25);
+    }
+
+    .encoded-title {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .lede {
+      margin: 22px 0 0;
+      max-width: 62ch;
+      color: #c2d6dc;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .hero-actions,
+    .cta-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid rgba(118, 239, 255, 0.38);
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(118, 239, 255, 0.16), rgba(12, 30, 40, 0.78));
+      color: #f4feff;
+      font-weight: 800;
+      letter-spacing: 0;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 16px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .button::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border: 2px solid currentColor;
+      border-left-color: transparent;
+      transform: rotate(45deg);
+    }
+
+    .button.secondary {
+      border-color: rgba(216, 180, 91, 0.45);
+      background: linear-gradient(180deg, rgba(216, 180, 91, 0.12), rgba(18, 25, 31, 0.85));
+    }
+
+    .button.danger {
+      border-color: rgba(255, 64, 81, 0.42);
+      background: linear-gradient(180deg, rgba(255, 64, 81, 0.13), rgba(18, 25, 31, 0.85));
+    }
+
+    .visual-panel {
+      position: relative;
+      isolation: isolate;
+      min-height: 330px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.05), transparent 22%),
+        rgba(5, 11, 16, 0.72);
+      overflow: hidden;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.58);
+    }
+
+    .visual-panel::before {
+      content: "WAR-ROOM / HANGAR BAY";
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1;
+      color: rgba(229, 253, 255, 0.78);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+    }
+
+    .visual-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 49.5%, rgba(118, 239, 255, 0.28) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 49.5%, rgba(118, 239, 255, 0.14) 50%, transparent 50.5%);
+      opacity: 0.42;
+      pointer-events: none;
+    }
+
+    .visual-panel img {
+      width: 100%;
+      height: 100%;
+      min-height: 330px;
+      object-fit: cover;
+      filter: saturate(1.1) contrast(1.08);
+    }
+
+    section {
+      padding: 46px 0;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--cyan);
+      padding-left: 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: #f7feff;
+      font-size: clamp(26px, 8vw, 48px);
+      line-height: 1;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .model-grid,
+    .tool-grid,
+    .fact-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .model-card,
+    .tool-card,
+    .fact-card {
+      position: relative;
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(118, 239, 255, 0.08), transparent 36%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+        rgba(9, 18, 25, 0.86);
+      overflow: hidden;
+    }
+
+    .model-card::before {
+      content: attr(data-code);
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      color: rgba(118, 239, 255, 0.32);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .model-card::after,
+    .tool-card::after,
+    .fact-card::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 42px;
+      height: 4px;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(118, 239, 255, 0.7);
+    }
+
+    .model-card h3,
+    .tool-card h3,
+    .fact-card h3 {
+      margin: 0 0 16px;
+      color: #f1feff;
+      font-size: 20px;
+      line-height: 1.18;
+      word-break: break-word;
+    }
+
+    .model-card p,
+    .tool-card p,
+    .fact-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .card-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin: 0 0 14px;
+    }
+
+    .card-gallery img,
+    .tool-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 1px solid rgba(118, 239, 255, 0.22);
+      background: rgba(2, 6, 9, 0.62);
+      filter: saturate(1.08) contrast(1.06);
+    }
+
+    .card-gallery img {
+      aspect-ratio: 1;
+      min-width: 0;
+    }
+
+    .tool-visual {
+      aspect-ratio: 16 / 10;
+      margin: 0 0 14px;
+      overflow: hidden;
+      border: 1px solid rgba(216, 180, 91, 0.24);
+      background: rgba(2, 6, 9, 0.62);
+    }
+
+    .asset-note {
+      display: inline-flex;
+      max-width: 100%;
+      margin: 0 0 10px;
+      color: rgba(201, 251, 255, 0.78);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .tool-card {
+      min-height: 138px;
+      background:
+        linear-gradient(90deg, rgba(216, 180, 91, 0.08), transparent 36%),
+        rgba(9, 18, 25, 0.88);
+    }
+
+    .tool-card.warning::after {
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(255, 64, 81, 0.72);
+    }
+
+    .readiness {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(118, 239, 255, 0.06), transparent 28%, rgba(255, 64, 81, 0.055)),
+        rgba(3, 8, 12, 0.55);
+    }
+
+    .readiness-panel {
+      display: grid;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .meter {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(4, 11, 16, 0.76);
+    }
+
+    .meter-row {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .bar {
+      height: 9px;
+      border: 1px solid rgba(118, 239, 255, 0.24);
+      background: rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), #eefeff);
+      box-shadow: 0 0 18px rgba(118, 239, 255, 0.8);
+    }
+
+    .unknowns {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fact-card strong {
+      color: var(--cold);
+    }
+
+    footer {
+      padding: 30px 0 42px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (min-width: 680px) {
+      .hero-actions,
+      .cta-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .model-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .tool-grid,
+      .fact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 980px) {
+      .hero {
+        min-height: 92vh;
+        padding-top: 22px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 46px;
+      }
+
+      h1 {
+        max-width: 9ch;
+      }
+
+      .visual-panel {
+        min-height: 610px;
+      }
+
+      .visual-panel img {
+        min-height: 610px;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .model-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .model-card:nth-child(1),
+      .model-card:nth-child(4) {
+        grid-column: span 2;
+      }
+
+      .readiness-panel {
+        grid-template-columns: 0.9fr 1.1fr;
+      }
+
+      .tool-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="topbar" aria-label="站点状态">
+        <span class="mark">高达未来机库</span>
+        <span class="status">ACCESS: to-be-confirmed</span>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">mobile hangar command</p>
+          <h1>高达未来机库</h1>
+          <p class="encoded-title">项目名：高达未来机库</p>
+          <p class="lede">以深色金属、冷白/青色 HUD 光效与克制警戒红构成的模型战备陈列界面。所有真实联系方式、购买、价格、库存、品牌归属与素材授权细节均为 <strong>to-be-confirmed</strong>。</p>
+          <nav class="hero-actions" aria-label="主要行动">
+            <a class="button danger" href="#consult">咨询战备配置</a>
+            <a class="button" href="#models">查看模型阵列</a>
+            <a class="button secondary" href="#starter">获取入门套装</a>
+          </nav>
+        </div>
+
+        <figure class="visual-panel" aria-label="原创未来机库视觉">
+          <img src="assets/future-hangar-silhouette.svg" alt="原创未来机库与非品牌机甲剪影">
+        </figure>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="models" class="shell" aria-labelledby="models-title">
+      <div class="section-head">
+        <h2 id="models-title">模型阵列</h2>
+        <p>按战备舱位呈现的展示清单；名称按任务提示词原文保留，不推断现实规格。</p>
+      </div>
+      <div class="model-grid">
+        <article class="model-card" data-code="M-01">
+          <h3>沙扎比</h3>
+          <div class="card-gallery" aria-label="沙扎比项目本地图片">
+            <img src="assets/models/sazabi/sazabi-01.png" alt="沙扎比本地图片 1">
+            <img src="assets/models/sazabi/sazabi-02.png" alt="沙扎比本地图片 2">
+            <img src="assets/models/sazabi/sazabi-03.png" alt="沙扎比本地图片 3">
+            <img src="assets/models/sazabi/sazabi-image2-04.png" alt="沙扎比 image2 生成图片 4">
+          </div>
+          <span class="asset-note">4 local images; image2 generated variant</span>
+          <p>陈列定位、比例、版本与库存状态：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-02">
+          <h3>牛高达</h3>
+          <div class="card-gallery" aria-label="牛高达项目本地图片">
+            <img src="assets/models/nu/nu-01.png" alt="牛高达本地图片 1">
+            <img src="assets/models/nu/nu-02.png" alt="牛高达本地图片 2">
+            <img src="assets/models/nu/nu-03.png" alt="牛高达本地图片 3">
+            <img src="assets/models/nu/nu-04.png" alt="牛高达本地图片 4">
+          </div>
+          <span class="asset-note">4 local source images</span>
+          <p>装甲分色、骨架信息与配置来源：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-03">
+          <h3>Z高达</h3>
+          <div class="card-gallery" aria-label="Z高达项目本地图片">
+            <img src="assets/models/zeta/zeta-01.png" alt="Z高达本地图片 1">
+            <img src="assets/models/zeta/zeta-02.png" alt="Z高达本地图片 2">
+            <img src="assets/models/zeta/zeta-03.png" alt="Z高达本地图片 3">
+            <img src="assets/models/zeta/zeta-image2-04.png" alt="Z高达 image2 生成图片 4">
+          </div>
+          <span class="asset-note">4 local images; image2 generated variant</span>
+          <p>展示形态、变形结构与配件细节：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-04">
+          <h3>ZZ高达</h3>
+          <div class="card-gallery" aria-label="ZZ高达项目本地图片">
+            <img src="assets/models/zz/zz-01.png" alt="ZZ高达本地图片 1">
+            <img src="assets/models/zz/zz-02.png" alt="ZZ高达本地图片 2">
+            <img src="assets/models/zz/zz-image2-03.png" alt="ZZ高达 image2 生成图片 3">
+            <img src="assets/models/zz/zz-image2-04.png" alt="ZZ高达 image2 生成图片 4">
+          </div>
+          <span class="asset-note">4 local images; image2 generated variants</span>
+          <p>重装展示位、支架承重与扩展包兼容：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-05">
+          <h3>独角兽高达</h3>
+          <div class="card-gallery" aria-label="独角兽高达项目本地图片">
+            <img src="assets/models/unicorn/unicorn-01.png" alt="独角兽高达本地图片 1">
+            <img src="assets/models/unicorn/unicorn-02.png" alt="独角兽高达本地图片 2">
+            <img src="assets/models/unicorn/unicorn-03.png" alt="独角兽高达本地图片 3">
+            <img src="assets/models/unicorn/unicorn-image2-04.png" alt="独角兽高达 image2 生成图片 4">
+          </div>
+          <span class="asset-note">4 local images; image2 generated variant</span>
+          <p>特殊外甲、灯效与展示角度建议：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-06">
+          <h3>强袭自由高达</h3>
+          <div class="card-gallery" aria-label="强袭自由高达项目本地图片">
+            <img src="assets/models/strike-freedom/strike-freedom-01.png" alt="强袭自由高达本地图片 1">
+            <img src="assets/models/strike-freedom/strike-freedom-02.png" alt="强袭自由高达本地图片 2">
+            <img src="assets/models/strike-freedom/strike-freedom-03.png" alt="强袭自由高达本地图片 3">
+            <img src="assets/models/strike-freedom/strike-freedom-04.png" alt="强袭自由高达本地图片 4">
+          </div>
+          <span class="asset-note">4 local source images</span>
+          <p>主题舱位、姿态方案与附加武装：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-07">
+          <h3>元祖高达</h3>
+          <div class="card-gallery" aria-label="元祖高达项目本地图片">
+            <img src="assets/models/rx-78-2/rx-78-2-01.png" alt="元祖高达本地图片 1">
+            <img src="assets/models/rx-78-2/rx-78-2-02.png" alt="元祖高达本地图片 2">
+            <img src="assets/models/rx-78-2/rx-78-2-03.png" alt="元祖高达本地图片 3">
+            <img src="assets/models/rx-78-2/rx-78-2-image2-04.png" alt="元祖高达 image2 生成图片 4">
+          </div>
+          <span class="asset-note">4 local images; image2 generated variant</span>
+          <p>核心陈列等级、来源说明与授权信息：to-be-confirmed。</p>
+        </article>
+        <article class="model-card" data-code="M-08">
+          <h3>命运高达</h3>
+          <div class="card-gallery" aria-label="命运高达项目本地图片">
+            <img src="assets/models/destiny/destiny-01.png" alt="命运高达本地图片 1">
+            <img src="assets/models/destiny/destiny-02.png" alt="命运高达本地图片 2">
+            <img src="assets/models/destiny/destiny-03.png" alt="命运高达本地图片 3">
+            <img src="assets/models/destiny/destiny-04.png" alt="命运高达本地图片 4">
+          </div>
+          <span class="asset-note">4 local source images</span>
+          <p>核心陈列等级、来源说明与授权信息：to-be-confirmed。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="starter" class="readiness" aria-labelledby="tools-title">
+      <div class="shell readiness-panel">
+        <div>
+          <div class="section-head">
+            <h2 id="tools-title">装备与工具</h2>
+            <p>围绕模型陈列、补件、扩展装备与新手入门套装组织，避免任何真实购买承诺。</p>
+          </div>
+          <div class="meter" aria-label="展示战备指标">
+            <div class="meter-row"><span>HUD 灯效</span><div class="bar"><span style="width: 91%"></span></div></div>
+            <div class="meter-row"><span>金属层次</span><div class="bar"><span style="width: 86%"></span></div></div>
+            <div class="meter-row"><span>授权状态</span><div class="bar"><span style="width: 36%"></span></div></div>
+          </div>
+        </div>
+
+        <div class="tool-grid">
+          <article class="tool-card">
+            <h3>各种水贴</h3>
+            <div class="tool-visual">
+              <img src="assets/tools/water-decals-image2.png" alt="各种水贴 image2 生成视觉">
+            </div>
+            <span class="asset-note">local image2 visual; exact source: to-be-confirmed</span>
+            <p>水贴种类、适配型号、使用说明与来源：to-be-confirmed。</p>
+          </article>
+          <article class="tool-card">
+            <h3>展示架</h3>
+            <div class="tool-visual">
+              <img src="assets/tools/display-stand-image2.png" alt="展示架 image2 生成视觉">
+            </div>
+            <span class="asset-note">local image2 visual; exact source: to-be-confirmed</span>
+            <p>展示架尺寸、承重、透明件材质与适配范围：to-be-confirmed。</p>
+          </article>
+          <article class="tool-card warning">
+            <h3>补件/扩展装备</h3>
+            <div class="tool-visual">
+              <img src="assets/tools/expansion-equipment-image2.png" alt="补件和扩展装备 image2 生成视觉">
+            </div>
+            <span class="asset-note">local image2 visual; exact source: to-be-confirmed</span>
+            <p>扩展装备、补件清单、兼容性与真实库存均为 to-be-confirmed。</p>
+          </article>
+          <article class="tool-card">
+            <h3>新手七件套装</h3>
+            <div class="tool-visual">
+              <img src="assets/tools/starter-seven-piece.png" alt="新手七件套装项目本地图片">
+            </div>
+            <span class="asset-note">local source image</span>
+            <p>入门工具组合、使用教程、价格与发货信息：to-be-confirmed。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="consult" class="shell" aria-labelledby="consult-title">
+      <div class="section-head">
+        <h2 id="consult-title">战备配置请求</h2>
+        <p>这里仅提供静态 CTA 与信息占位，不提交表单、不连接后端、不追踪访问。</p>
+      </div>
+      <div class="fact-grid">
+        <article class="fact-card">
+          <h3>真实联系方式</h3>
+          <p><strong>to-be-confirmed</strong>。页面不包含真实电话、邮箱、客服或社交账号。</p>
+        </article>
+        <article class="fact-card">
+          <h3>购买/价格/库存</h3>
+          <p><strong>to-be-confirmed</strong>。本页不提供支付、购物车、库存承诺或价格承诺。</p>
+        </article>
+        <article class="fact-card">
+          <h3>品牌归属</h3>
+          <p><strong>to-be-confirmed</strong>。本项目视觉为原创机库剪影，不使用官方标志或海报图。</p>
+        </article>
+        <article class="fact-card">
+          <h3>素材授权</h3>
+          <p><strong>to-be-confirmed</strong>。本地视觉资产存放在 assets/，用于此静态页面展示。</p>
+        </article>
+      </div>
+      <div class="cta-row" aria-label="页面底部行动">
+        <a class="button danger" href="#consult">咨询战备配置</a>
+        <a class="button" href="#models">查看模型阵列</a>
+        <a class="button secondary" href="#starter">获取入门套装</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">高达未来机库。Static direct-open HTML. Runtime network dependencies: none. Release status: to-be-confirmed.</div>
+  </footer>
+</body>
+</html>

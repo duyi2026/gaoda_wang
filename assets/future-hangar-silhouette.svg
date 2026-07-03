@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Original futuristic hangar with mecha silhouette</title>
+  <desc id="desc">A cold cyan war-room hangar bay with an original non-branded mecha silhouette and maintenance gantries.</desc>
+  <defs>
+    <linearGradient id="bay" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f1922"/>
+      <stop offset="0.55" stop-color="#071017"/>
+      <stop offset="1" stop-color="#020609"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" x2="1">
+      <stop offset="0" stop-color="#162532"/>
+      <stop offset="0.5" stop-color="#2a3b47"/>
+      <stop offset="1" stop-color="#101923"/>
+    </linearGradient>
+    <linearGradient id="visor" x1="0" x2="1">
+      <stop offset="0" stop-color="#eafcff" stop-opacity="0.15"/>
+      <stop offset="0.5" stop-color="#70eaff"/>
+      <stop offset="1" stop-color="#eafcff" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="floorGrid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0v80" fill="none" stroke="#7feaff" stroke-opacity="0.11" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="820" fill="url(#bay)"/>
+  <path d="M0 222h1200M0 326h1200M0 520h1200" stroke="#d9faff" stroke-opacity="0.06" stroke-width="2"/>
+  <path d="M112 76h976l-96 470H208z" fill="#060d13" stroke="#8fefff" stroke-opacity="0.22" stroke-width="3"/>
+  <path d="M169 96h862l-77 400H246z" fill="#0c151d" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"/>
+  <g stroke="#7feaff" stroke-opacity="0.25" fill="none" stroke-width="4">
+    <path d="M235 118v396M382 118v396M818 118v396M965 118v396"/>
+    <path d="M196 188h808M178 284h844M156 430h888"/>
+    <path d="M330 120 228 516M870 120l102 396"/>
+  </g>
+  <g fill="url(#steel)" stroke="#dffcff" stroke-opacity="0.15">
+    <path d="M70 188h170v42H70zM960 188h170v42H960z"/>
+    <path d="M41 246h205v22H41zM954 246h205v22H954z"/>
+    <path d="M92 512h174v38H92zM934 512h174v38H934z"/>
+  </g>
+  <g filter="url(#cyanGlow)" stroke="#8ff3ff" stroke-linecap="round">
+    <path d="M164 188h72M964 188h72M325 188h550" stroke-width="4" opacity="0.9"/>
+    <path d="M280 284h640M225 430h750" stroke-width="2" opacity="0.55"/>
+    <path d="M600 112v58M600 610v84" stroke-width="3" opacity="0.55"/>
+  </g>
+  <g id="mecha" transform="translate(600 398)" fill="#0b1118" stroke="#d7f9ff" stroke-opacity="0.26" stroke-linejoin="round">
+    <path d="M-58-236h116l24 54-38 54H-44l-38-54z" fill="#111b25"/>
+    <path d="M-88-142h176l42 132-54 92H-76l-54-92z" fill="#121c25"/>
+    <path d="M-140-104l-88 48-20 172 70 20 54-128z" fill="#0a1219"/>
+    <path d="M140-104l88 48 20 172-70 20-54-128z" fill="#0a1219"/>
+    <path d="M-72 78h64l-12 238h-86z" fill="#0f1821"/>
+    <path d="M8 78h64l34 238H20z" fill="#0f1821"/>
+    <path d="M-102 316h112l-12 58h-146zM-10 316h112l46 58H2z" fill="#182631"/>
+    <path d="M-28-222h56l18 35-46 18-46-18z" fill="#192a35"/>
+    <path d="M-31-188h62" stroke="#77efff" stroke-width="5" filter="url(#cyanGlow)"/>
+    <path d="M-174-86l-70-106M174-86l70-106" fill="none" stroke="#f1c560" stroke-opacity="0.34" stroke-width="9"/>
+  </g>
+  <path d="M0 584h1200v236H0z" fill="url(#floorGrid)" opacity="0.85"/>
+  <path d="M112 820 456 584h288l344 236z" fill="#0c141b" opacity="0.92"/>
+  <path d="M310 812 532 584h136l222 228" fill="none" stroke="#7feaff" stroke-opacity="0.18" stroke-width="2"/>
+  <g fill="#ff4655" opacity="0.85">
+    <rect x="152" y="536" width="10" height="48"/>
+    <rect x="1038" y="536" width="10" height="48"/>
+    <rect x="576" y="590" width="48" height="6"/>
+  </g>
+  <g fill="#e9fcff" opacity="0.7">
+    <rect x="94" y="138" width="72" height="4"/>
+    <rect x="1034" y="138" width="72" height="4"/>
+    <rect x="507" y="704" width="186" height="3"/>
+  </g>
+</svg>

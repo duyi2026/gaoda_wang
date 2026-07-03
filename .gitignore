@@ -1,0 +1,53 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*.tmp
+*.bak
+*~
+.idea/
+.vscode/
+
+# Logs and local diagnostics
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency folders
+node_modules/
+.pnp/
+.pnp.*
+
+# Build and generated output
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+coverage/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Tool caches
+.cache/
+.parcel-cache/
+.turbo/
+.vite/
+.eslintcache
+*.tsbuildinfo
+
+# Python caches, in case local scripts are added later
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
