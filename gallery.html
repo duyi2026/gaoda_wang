@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>机体图片页面 - 高达未来机库</title>
+  <style>
+    :root {
+      --void: #020609;
+      --panel: #071017;
+      --panel-2: #0c1a23;
+      --line: rgba(202, 249, 255, 0.18);
+      --text: #e8f7f8;
+      --muted: #8ba7b3;
+      --cyan: #76efff;
+      --cold: #c9fbff;
+      --red: #ff4051;
+      --gold: #d8b45b;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--void);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 16% 6%, rgba(255, 64, 81, 0.13), transparent 24rem),
+        radial-gradient(circle at 72% 0%, rgba(118, 239, 255, 0.16), transparent 34rem),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 76px),
+        linear-gradient(180deg, #08131b 0%, var(--void) 46%, #03070b 100%);
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 100% 7px,
+        radial-gradient(circle at 50% 18%, transparent 0 44%, rgba(2, 6, 9, 0.56) 80%);
+      mix-blend-mode: screen;
+      opacity: 0.28;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .shell {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .mark {
+      display: inline-grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      color: var(--cold);
+      font-weight: 900;
+    }
+
+    .mark::before {
+      content: "";
+      width: 28px;
+      aspect-ratio: 1;
+      background:
+        linear-gradient(90deg, transparent 42%, var(--cyan) 42% 58%, transparent 58%),
+        linear-gradient(transparent 42%, var(--cyan) 42% 58%, transparent 58%),
+        linear-gradient(135deg, transparent 15%, rgba(118, 239, 255, 0.24) 15% 85%, transparent 85%);
+      border: 1px solid rgba(118, 239, 255, 0.55);
+      box-shadow: 0 0 20px rgba(118, 239, 255, 0.25);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 0 10px;
+      border: 1px solid rgba(118, 239, 255, 0.26);
+      border-radius: 6px;
+      color: var(--cyan);
+      font-weight: 900;
+      background: rgba(7, 16, 23, 0.72);
+    }
+
+    .back-link::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-left: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+    }
+
+    .hero {
+      padding: 24px 0 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 18px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: var(--cyan);
+      box-shadow: 0 0 12px rgba(118, 239, 255, 0.8);
+    }
+
+    h1 {
+      margin: 0;
+      color: #f6feff;
+      font-size: clamp(40px, 13vw, 96px);
+      line-height: 0.95;
+      font-weight: 900;
+      text-shadow: 0 0 34px rgba(118, 239, 255, 0.22);
+    }
+
+    .summary {
+      margin: 16px 0 0;
+      max-width: 68ch;
+      color: #c2d6dc;
+      line-height: 1.75;
+    }
+
+    .model-switcher {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 8px;
+      scrollbar-color: rgba(118, 239, 255, 0.45) transparent;
+    }
+
+    .model-tab {
+      flex: 0 0 auto;
+      min-height: 40px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(118, 239, 255, 0.2);
+      border-radius: 6px;
+      color: var(--muted);
+      background: rgba(7, 16, 23, 0.78);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .model-tab[aria-current="page"] {
+      color: #f4feff;
+      border-color: rgba(118, 239, 255, 0.62);
+      background: linear-gradient(180deg, rgba(118, 239, 255, 0.16), rgba(12, 30, 40, 0.78));
+      box-shadow: 0 0 24px rgba(118, 239, 255, 0.13);
+    }
+
+    main {
+      padding: 28px 0 58px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .photo-frame {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(118, 239, 255, 0.08), transparent 36%),
+        rgba(9, 18, 25, 0.88);
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.38);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: rgba(2, 6, 9, 0.62);
+      filter: saturate(1.08) contrast(1.06);
+    }
+
+    .photo-frame::before {
+      content: attr(data-index);
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      color: rgba(229, 253, 255, 0.82);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .price-button {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      min-width: 74px;
+      min-height: 38px;
+      border: 1px solid rgba(216, 180, 91, 0.72);
+      border-radius: 6px;
+      color: #fff8df;
+      background: linear-gradient(180deg, rgba(216, 180, 91, 0.96), rgba(113, 78, 28, 0.92));
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42), 0 0 18px rgba(216, 180, 91, 0.22);
+      cursor: pointer;
+    }
+
+    .price-button:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .price-status {
+      min-height: 24px;
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    footer {
+      padding: 30px 0 42px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (min-width: 720px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1080px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="topbar" aria-label="图库导航">
+        <span class="mark">高达未来机库</span>
+        <a class="back-link" href="index.html#models">返回模型阵列</a>
+      </div>
+
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">model image bay</p>
+          <h1 id="model-title">机体图片页面</h1>
+          <p class="summary" id="model-summary">全部图片来自项目本地 assets/ 目录；真实价格、库存、版本与授权状态均为 to-be-confirmed。</p>
+        </div>
+        <nav class="model-switcher" id="model-switcher" aria-label="切换机体图片页面"></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <p class="price-status" id="price-status" role="status" aria-live="polite">价格状态：to-be-confirmed。</p>
+    <section class="gallery-grid" id="gallery-grid" aria-label="机体图片"></section>
+  </main>
+
+  <footer>
+    <div class="shell">Static direct-open HTML. Runtime network dependencies: none. Price data: to-be-confirmed.</div>
+  </footer>
+
+  <script>
+    const models = {
+      "sazabi": {
+        name: "沙扎比",
+        note: "4 local images; image2 generated variant",
+        images: [
+          "assets/models/sazabi/sazabi-01.png",
+          "assets/models/sazabi/sazabi-02.png",
+          "assets/models/sazabi/sazabi-03.png",
+          "assets/models/sazabi/sazabi-image2-04.png"
+        ]
+      },
+      "nu": {
+        name: "牛高达",
+        note: "10 local source images",
+        images: [
+          "assets/models/nu/nu-01.png",
+          "assets/models/nu/nu-02.png",
+          "assets/models/nu/nu-03.png",
+          "assets/models/nu/nu-04.png",
+          "assets/models/nu/nu-05.png",
+          "assets/models/nu/nu-06.png",
+          "assets/models/nu/nu-07.png",
+          "assets/models/nu/nu-08.png",
+          "assets/models/nu/nu-09.png",
+          "assets/models/nu/nu-10.png"
+        ]
+      },
+      "zeta": {
+        name: "Z高达",
+        note: "4 local images; image2 generated variant",
+        images: [
+          "assets/models/zeta/zeta-01.png",
+          "assets/models/zeta/zeta-02.png",
+          "assets/models/zeta/zeta-03.png",
+          "assets/models/zeta/zeta-image2-04.png"
+        ]
+      },
+      "zz": {
+        name: "ZZ高达",
+        note: "4 local images; image2 generated variants",
+        images: [
+          "assets/models/zz/zz-01.png",
+          "assets/models/zz/zz-02.png",
+          "assets/models/zz/zz-image2-03.png",
+          "assets/models/zz/zz-image2-04.png"
+        ]
+      },
+      "unicorn": {
+        name: "独角兽高达",
+        note: "4 local images; image2 generated variant",
+        images: [
+          "assets/models/unicorn/unicorn-01.png",
+          "assets/models/unicorn/unicorn-02.png",
+          "assets/models/unicorn/unicorn-03.png",
+          "assets/models/unicorn/unicorn-image2-04.png"
+        ]
+      },
+      "strike-freedom": {
+        name: "强袭自由高达",
+        note: "8 local source images",
+        images: [
+          "assets/models/strike-freedom/strike-freedom-01.png",
+          "assets/models/strike-freedom/strike-freedom-02.png",
+          "assets/models/strike-freedom/strike-freedom-03.png",
+          "assets/models/strike-freedom/strike-freedom-04.png",
+          "assets/models/strike-freedom/strike-freedom-05.png",
+          "assets/models/strike-freedom/strike-freedom-06.png",
+          "assets/models/strike-freedom/strike-freedom-07.png",
+          "assets/models/strike-freedom/strike-freedom-08.png"
+        ]
+      },
+      "rx-78-2": {
+        name: "元祖高达",
+        note: "4 local images; image2 generated variant",
+        images: [
+          "assets/models/rx-78-2/rx-78-2-01.png",
+          "assets/models/rx-78-2/rx-78-2-02.png",
+          "assets/models/rx-78-2/rx-78-2-03.png",
+          "assets/models/rx-78-2/rx-78-2-image2-04.png"
+        ]
+      },
+      "destiny": {
+        name: "命运高达",
+        note: "5 local source images",
+        images: [
+          "assets/models/destiny/destiny-01.png",
+          "assets/models/destiny/destiny-02.png",
+          "assets/models/destiny/destiny-03.png",
+          "assets/models/destiny/destiny-04.png",
+          "assets/models/destiny/destiny-05.png"
+        ]
+      }
+    };
+
+    const title = document.querySelector("#model-title");
+    const summary = document.querySelector("#model-summary");
+    const switcher = document.querySelector("#model-switcher");
+    const gallery = document.querySelector("#gallery-grid");
+    const priceStatus = document.querySelector("#price-status");
+
+    function currentKey() {
+      const key = decodeURIComponent(location.hash.replace("#", ""));
+      return models[key] ? key : "sazabi";
+    }
+
+    function renderSwitcher(activeKey) {
+      switcher.replaceChildren(...Object.entries(models).map(([key, model]) => {
+        const link = document.createElement("a");
+        link.className = "model-tab";
+        link.href = `#${key}`;
+        link.textContent = model.name;
+        if (key === activeKey) {
+          link.setAttribute("aria-current", "page");
+        }
+        return link;
+      }));
+    }
+
+    function renderGallery() {
+      const key = currentKey();
+      const model = models[key];
+      document.title = `${model.name}图片页面 - 高达未来机库`;
+      title.textContent = `${model.name}图片页面`;
+      summary.textContent = `${model.note}。真实价格、库存、版本与授权状态均为 to-be-confirmed。`;
+      priceStatus.textContent = "价格状态：to-be-confirmed。";
+      renderSwitcher(key);
+
+      gallery.replaceChildren(...model.images.map((src, index) => {
+        const frame = document.createElement("figure");
+        frame.className = "photo-frame";
+        frame.dataset.index = `IMG-${String(index + 1).padStart(2, "0")}`;
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `${model.name}图片 ${index + 1}`;
+        img.loading = index > 2 ? "lazy" : "eager";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "price-button";
+        button.textContent = "价格";
+        button.setAttribute("aria-label", `${model.name}图片 ${index + 1} 价格：to-be-confirmed`);
+        button.addEventListener("click", () => {
+          priceStatus.textContent = `${model.name} 图片 ${index + 1} 价格：to-be-confirmed。`;
+        });
+
+        frame.append(img, button);
+        return frame;
+      }));
+    }
+
+    window.addEventListener("hashchange", renderGallery);
+    renderGallery();
+  </script>
+</body>
+</html>

@@ -230,15 +230,38 @@
 
     .visual-panel {
       position: relative;
+      display: block;
       isolation: isolate;
-      min-height: 330px;
+      height: 430px;
       border: 1px solid var(--line);
+      outline: 1px solid rgba(118, 239, 255, 0.72);
+      outline-offset: 8px;
       border-radius: var(--radius);
       background:
         linear-gradient(120deg, rgba(255, 255, 255, 0.05), transparent 22%),
-        rgba(5, 11, 16, 0.72);
+        #000;
       overflow: hidden;
-      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.58);
+      box-shadow:
+        0 0 0 1px rgba(2, 6, 9, 0.9),
+        0 0 0 10px rgba(3, 8, 12, 0.72),
+        0 0 34px rgba(118, 239, 255, 0.2),
+        0 26px 80px rgba(0, 0, 0, 0.58);
+    }
+
+    .visual-panel:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .visual-click {
+      display: block;
+      height: 100%;
+      background: #000;
+    }
+
+    .visual-click:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: -5px;
     }
 
     .visual-panel::before {
@@ -267,9 +290,78 @@
     .visual-panel img {
       width: 100%;
       height: 100%;
-      min-height: 330px;
-      object-fit: cover;
+      object-fit: contain;
+      background: #000;
       filter: saturate(1.1) contrast(1.08);
+      transition: opacity 180ms ease, transform 420ms ease;
+    }
+
+    .visual-panel.is-switching img {
+      opacity: 0.16;
+      transform: scale(1.015);
+    }
+
+    .carousel-tag {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 1;
+      max-width: calc(100% - 112px);
+      padding: 7px 10px;
+      border: 1px solid rgba(118, 239, 255, 0.32);
+      border-radius: 6px;
+      background: rgba(3, 8, 12, 0.72);
+      color: #f4feff;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.25;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+    }
+
+    .carousel-controls {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 3;
+      display: flex;
+      gap: 8px;
+    }
+
+    .carousel-control {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(118, 239, 255, 0.42);
+      border-radius: 6px;
+      background: rgba(3, 8, 12, 0.78);
+      color: var(--cyan);
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
+    }
+
+    .carousel-control::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid currentColor;
+      border-right: 2px solid currentColor;
+    }
+
+    .carousel-control.prev::before {
+      transform: rotate(-135deg);
+    }
+
+    .carousel-control.next::before {
+      transform: rotate(45deg);
+    }
+
+    .carousel-control:hover,
+    .carousel-control:focus-visible {
+      border-color: rgba(201, 251, 255, 0.78);
+      color: #f4feff;
+      outline: none;
+      box-shadow: 0 0 24px rgba(118, 239, 255, 0.18), 0 12px 28px rgba(0, 0, 0, 0.36);
     }
 
     section {
@@ -308,6 +400,7 @@
     .tool-card,
     .fact-card {
       position: relative;
+      display: block;
       min-height: 118px;
       padding: 16px;
       border: 1px solid var(--line);
@@ -317,6 +410,18 @@
         linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
         rgba(9, 18, 25, 0.86);
       overflow: hidden;
+    }
+
+    .model-card {
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .model-card:hover,
+    .model-card:focus-visible {
+      border-color: rgba(118, 239, 255, 0.62);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.36), 0 0 26px rgba(118, 239, 255, 0.14);
+      transform: translateY(-2px);
+      outline: none;
     }
 
     .model-card::before {
@@ -400,6 +505,25 @@
       font-weight: 800;
       line-height: 1.35;
       text-transform: uppercase;
+    }
+
+    .gallery-entry {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .gallery-entry::after {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-top: 2px solid currentColor;
+      border-right: 2px solid currentColor;
+      transform: rotate(45deg);
     }
 
     .tool-card {
@@ -509,11 +633,11 @@
       }
 
       .visual-panel {
-        min-height: 610px;
+        height: 610px;
       }
 
       .visual-panel img {
-        min-height: 610px;
+        height: 100%;
       }
 
       section {
@@ -560,8 +684,15 @@
           </nav>
         </div>
 
-        <figure class="visual-panel" aria-label="原创未来机库视觉">
-          <img src="assets/future-hangar-silhouette.svg" alt="原创未来机库与非品牌机甲剪影">
+        <figure class="visual-panel" id="hero-carousel-panel" aria-label="模型图片轮播">
+          <a class="visual-click" id="hero-carousel-link" href="gallery.html#sazabi" aria-label="打开沙扎比图片页面">
+            <img id="hero-carousel-image" src="assets/models/sazabi/sazabi-01.png" alt="沙扎比图片 1">
+          </a>
+          <span class="carousel-tag" id="hero-carousel-tag">沙扎比 / IMG-01</span>
+          <span class="carousel-controls" aria-label="切换机体图片">
+            <button class="carousel-control prev" id="hero-carousel-prev" type="button" aria-label="上一张图片"></button>
+            <button class="carousel-control next" id="hero-carousel-next" type="button" aria-label="下一张图片"></button>
+          </span>
         </figure>
       </div>
     </div>
@@ -574,7 +705,7 @@
         <p>按战备舱位呈现的展示清单；名称按任务提示词原文保留，不推断现实规格。</p>
       </div>
       <div class="model-grid">
-        <article class="model-card" data-code="M-01">
+        <a class="model-card" href="gallery.html#sazabi" data-code="M-01" aria-label="打开沙扎比图片页面">
           <h3>沙扎比</h3>
           <div class="card-gallery" aria-label="沙扎比项目本地图片">
             <img src="assets/models/sazabi/sazabi-01.png" alt="沙扎比本地图片 1">
@@ -584,8 +715,9 @@
           </div>
           <span class="asset-note">4 local images; image2 generated variant</span>
           <p>陈列定位、比例、版本与库存状态：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-02">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#nu" data-code="M-02" aria-label="打开牛高达图片页面">
           <h3>牛高达</h3>
           <div class="card-gallery" aria-label="牛高达项目本地图片">
             <img src="assets/models/nu/nu-01.png" alt="牛高达本地图片 1">
@@ -595,8 +727,9 @@
           </div>
           <span class="asset-note">4 local source images</span>
           <p>装甲分色、骨架信息与配置来源：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-03">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#zeta" data-code="M-03" aria-label="打开Z高达图片页面">
           <h3>Z高达</h3>
           <div class="card-gallery" aria-label="Z高达项目本地图片">
             <img src="assets/models/zeta/zeta-01.png" alt="Z高达本地图片 1">
@@ -606,8 +739,9 @@
           </div>
           <span class="asset-note">4 local images; image2 generated variant</span>
           <p>展示形态、变形结构与配件细节：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-04">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#zz" data-code="M-04" aria-label="打开ZZ高达图片页面">
           <h3>ZZ高达</h3>
           <div class="card-gallery" aria-label="ZZ高达项目本地图片">
             <img src="assets/models/zz/zz-01.png" alt="ZZ高达本地图片 1">
@@ -617,8 +751,9 @@
           </div>
           <span class="asset-note">4 local images; image2 generated variants</span>
           <p>重装展示位、支架承重与扩展包兼容：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-05">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#unicorn" data-code="M-05" aria-label="打开独角兽高达图片页面">
           <h3>独角兽高达</h3>
           <div class="card-gallery" aria-label="独角兽高达项目本地图片">
             <img src="assets/models/unicorn/unicorn-01.png" alt="独角兽高达本地图片 1">
@@ -628,8 +763,9 @@
           </div>
           <span class="asset-note">4 local images; image2 generated variant</span>
           <p>特殊外甲、灯效与展示角度建议：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-06">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#strike-freedom" data-code="M-06" aria-label="打开强袭自由高达图片页面">
           <h3>强袭自由高达</h3>
           <div class="card-gallery" aria-label="强袭自由高达项目本地图片">
             <img src="assets/models/strike-freedom/strike-freedom-01.png" alt="强袭自由高达本地图片 1">
@@ -639,8 +775,9 @@
           </div>
           <span class="asset-note">4 local source images</span>
           <p>主题舱位、姿态方案与附加武装：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-07">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#rx-78-2" data-code="M-07" aria-label="打开元祖高达图片页面">
           <h3>元祖高达</h3>
           <div class="card-gallery" aria-label="元祖高达项目本地图片">
             <img src="assets/models/rx-78-2/rx-78-2-01.png" alt="元祖高达本地图片 1">
@@ -650,8 +787,9 @@
           </div>
           <span class="asset-note">4 local images; image2 generated variant</span>
           <p>核心陈列等级、来源说明与授权信息：to-be-confirmed。</p>
-        </article>
-        <article class="model-card" data-code="M-08">
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
+        <a class="model-card" href="gallery.html#destiny" data-code="M-08" aria-label="打开命运高达图片页面">
           <h3>命运高达</h3>
           <div class="card-gallery" aria-label="命运高达项目本地图片">
             <img src="assets/models/destiny/destiny-01.png" alt="命运高达本地图片 1">
@@ -661,7 +799,8 @@
           </div>
           <span class="asset-note">4 local source images</span>
           <p>核心陈列等级、来源说明与授权信息：to-be-confirmed。</p>
-        </article>
+          <span class="gallery-entry">查看全部图片</span>
+        </a>
       </div>
     </section>
 
@@ -750,5 +889,158 @@
   <footer>
     <div class="shell">高达未来机库。Static direct-open HTML. Runtime network dependencies: none. Release status: to-be-confirmed.</div>
   </footer>
+
+  <script>
+    const heroModelPools = [
+      {
+        model: "沙扎比",
+        hash: "sazabi",
+        images: [
+          "assets/models/sazabi/sazabi-01.png",
+          "assets/models/sazabi/sazabi-02.png",
+          "assets/models/sazabi/sazabi-03.png",
+          "assets/models/sazabi/sazabi-image2-04.png"
+        ]
+      },
+      {
+        model: "牛高达",
+        hash: "nu",
+        images: [
+          "assets/models/nu/nu-01.png",
+          "assets/models/nu/nu-02.png",
+          "assets/models/nu/nu-03.png",
+          "assets/models/nu/nu-04.png",
+          "assets/models/nu/nu-05.png",
+          "assets/models/nu/nu-06.png",
+          "assets/models/nu/nu-07.png",
+          "assets/models/nu/nu-08.png",
+          "assets/models/nu/nu-09.png",
+          "assets/models/nu/nu-10.png"
+        ]
+      },
+      {
+        model: "Z高达",
+        hash: "zeta",
+        images: [
+          "assets/models/zeta/zeta-01.png",
+          "assets/models/zeta/zeta-02.png",
+          "assets/models/zeta/zeta-03.png",
+          "assets/models/zeta/zeta-image2-04.png"
+        ]
+      },
+      {
+        model: "ZZ高达",
+        hash: "zz",
+        images: [
+          "assets/models/zz/zz-01.png",
+          "assets/models/zz/zz-02.png",
+          "assets/models/zz/zz-image2-03.png",
+          "assets/models/zz/zz-image2-04.png"
+        ]
+      },
+      {
+        model: "独角兽高达",
+        hash: "unicorn",
+        images: [
+          "assets/models/unicorn/unicorn-01.png",
+          "assets/models/unicorn/unicorn-02.png",
+          "assets/models/unicorn/unicorn-03.png",
+          "assets/models/unicorn/unicorn-image2-04.png"
+        ]
+      },
+      {
+        model: "强袭自由高达",
+        hash: "strike-freedom",
+        images: [
+          "assets/models/strike-freedom/strike-freedom-01.png",
+          "assets/models/strike-freedom/strike-freedom-02.png",
+          "assets/models/strike-freedom/strike-freedom-03.png",
+          "assets/models/strike-freedom/strike-freedom-04.png",
+          "assets/models/strike-freedom/strike-freedom-05.png",
+          "assets/models/strike-freedom/strike-freedom-06.png",
+          "assets/models/strike-freedom/strike-freedom-07.png",
+          "assets/models/strike-freedom/strike-freedom-08.png"
+        ]
+      },
+      {
+        model: "元祖高达",
+        hash: "rx-78-2",
+        images: [
+          "assets/models/rx-78-2/rx-78-2-01.png",
+          "assets/models/rx-78-2/rx-78-2-02.png",
+          "assets/models/rx-78-2/rx-78-2-03.png",
+          "assets/models/rx-78-2/rx-78-2-image2-04.png"
+        ]
+      },
+      {
+        model: "命运高达",
+        hash: "destiny",
+        images: [
+          "assets/models/destiny/destiny-01.png",
+          "assets/models/destiny/destiny-02.png",
+          "assets/models/destiny/destiny-03.png",
+          "assets/models/destiny/destiny-04.png",
+          "assets/models/destiny/destiny-05.png"
+        ]
+      }
+    ];
+
+    const heroSlides = heroModelPools.map((pool) => {
+      const imageIndex = Math.floor(Math.random() * pool.images.length);
+      return {
+        model: pool.model,
+        hash: pool.hash,
+        src: pool.images[imageIndex],
+        alt: `${pool.model}图片 ${imageIndex + 1}`,
+        imageNumber: imageIndex + 1
+      };
+    });
+
+    const carouselLink = document.querySelector("#hero-carousel-link");
+    const carouselPanel = document.querySelector("#hero-carousel-panel");
+    const carouselImage = document.querySelector("#hero-carousel-image");
+    const carouselTag = document.querySelector("#hero-carousel-tag");
+    const prevButton = document.querySelector("#hero-carousel-prev");
+    const nextButton = document.querySelector("#hero-carousel-next");
+    let heroSlideIndex = Math.floor(Math.random() * heroSlides.length);
+    let heroTimer;
+
+    function showHeroSlide(index) {
+      heroSlideIndex = (index + heroSlides.length) % heroSlides.length;
+      const slide = heroSlides[heroSlideIndex];
+      carouselPanel.classList.add("is-switching");
+      window.setTimeout(() => {
+        carouselImage.src = slide.src;
+        carouselImage.alt = slide.alt;
+        carouselLink.href = `gallery.html#${slide.hash}`;
+        carouselLink.setAttribute("aria-label", `打开${slide.model}图片页面`);
+        carouselTag.textContent = `${slide.model} / IMG-${String(slide.imageNumber).padStart(2, "0")}`;
+        carouselPanel.classList.remove("is-switching");
+      }, 120);
+    }
+
+    function restartHeroTimer() {
+      window.clearInterval(heroTimer);
+      heroTimer = window.setInterval(() => showHeroSlide(heroSlideIndex + 1), 3000);
+    }
+
+    function stepHeroSlide(direction) {
+      showHeroSlide(heroSlideIndex + direction);
+      restartHeroTimer();
+    }
+
+    prevButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      stepHeroSlide(-1);
+    });
+
+    nextButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      stepHeroSlide(1);
+    });
+
+    showHeroSlide(heroSlideIndex);
+    restartHeroTimer();
+  </script>
 </body>
 </html>
